@@ -7,10 +7,7 @@ which in turn allows us to retrieve use the API interface.
 '''
 
 # API Keys generated from apps.twitter.com
-consumer_key = 'wKtkBMoS9zCczcXNSpmBQmANv'
-consumer_secret = '3UtsuLRU0pLGQME4PI4BDAILHQ2qKLv9RL4eChOSvVOSfJ79Jr'
-access_token_key = '928484335031914496-dpXe6Lk6iRShm80XzR3GMnl1hOorhk7'
-access_token_secret = 'ji94aVMvSCKBlEneis3xIMInmQkrjaCfgWT1OWMbBbRc6'
+
 
 '''
 Twitter maintains a Python repository that with full API
