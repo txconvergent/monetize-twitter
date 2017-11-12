@@ -95,10 +95,12 @@ def searchTimeLine(search):
     print([s.text for s in statuses])
 
 
-
-
-
-
+'''Test for grabbing the original tweet from a reply'''
+def original_tweet(t):
+    for reply in t:
+        if reply.in_reply_to_status_id is not None:
+            tweet = api.GetStatus(status_id=reply.in_reply_to_status_id)
+            print tweet.text
 
 
 # main method in python, temp for testing
@@ -106,3 +108,4 @@ if __name__ == '__main__':
     smallTest()
     search = getInput()
     searchTimeLine(search)
+    original_tweet(api.GetSearch(term="applesupport", count=5))
