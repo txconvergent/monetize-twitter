@@ -1,6 +1,6 @@
 '''
 I made a twitter account: @ConvergentSupp
-                password: convergent
+                password: **********
 
 We need this account to be able to generate the keys shown below,
 which in turn allows us to retrieve use the API interface.
