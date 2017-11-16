@@ -79,7 +79,7 @@ def smallTest():
 #simple function tests getting search input and separates words
 #company name is first element of list returned
 def getInput():
-    search = input("Please enter a search in the format @<username> <string>\n").strip().split(' ')
+    search = raw_input("Please enter a search in the format @<username> <string>\n").strip().split(' ')
     search[0] = search[0].replace('@', '')
     return search
 
@@ -99,7 +99,7 @@ def searchTimeLine(search):
        finally print out
     '''
 
-    print([s.text for s in statuses])
+    print("\n".join([s.text for s in statuses]))
 
 
 '''Test for grabbing the original tweet from a reply'''
