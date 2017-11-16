@@ -20,12 +20,19 @@ https://github.com/bear/python-twitter
 '''
 import twitter
 
-# Initiallizing the API w/ @ConvergentSupp keys
-api = twitter.Api(consumer_key=consumer_key,
-                      consumer_secret=consumer_secret,
-                      access_token_key=access_token_key,
-                      access_token_secret=access_token_secret)
+# Initializes Twitter API from input file
+def initializeAPIfromfile(filename):
+    api = None
+    keys = []
+    with open(filename) as f:
+        keys = [line.strip() for line in f]
+        api = twitter.Api(consumer_key=keys[0],
+                          consumer_secret=keys[1],
+                          access_token_key=keys[2],
+                          access_token_secret=keys[3])
+    return api
 
+api = initializeAPIfromfile("keys.txt")
 
 '''
 The API is pretty dense for documentation, so here's
@@ -72,7 +79,7 @@ def smallTest():
 #simple function tests getting search input and separates words
 #company name is first element of list returned
 def getInput():
-    search = input("Please enter a search in the format @<username> <string>\n").split(' ')
+    search = input("Please enter a search in the format @<username> <string>\n").strip().split(' ')
     search[0] = search[0].replace('@', '')
     return search
 
@@ -100,7 +107,7 @@ def original_tweet(t):
     for reply in t:
         if reply.in_reply_to_status_id is not None:
             tweet = api.GetStatus(status_id=reply.in_reply_to_status_id)
-            print tweet.text
+            print(tweet.text)
 
 
 # main method in python, temp for testing
