@@ -79,7 +79,7 @@ def smallTest():
 #simple function tests getting search input and separates words
 #company name is first element of list returned
 def getInput():
-    search = raw_input("Please enter a search in the format @<username> <string>\n").strip().split(' ')
+    search = input("Please enter a search in the format @<username> <string>\n").strip().split(' ')
     search[0] = search[0].replace('@', '')
     return search
 
