@@ -102,12 +102,18 @@ def searchTimeLine(search):
     print("\n".join([s.text for s in statuses]))
 
 
-'''Test for grabbing the original tweet from a reply'''
-def original_tweet(t):
-    for reply in t:
-        if reply.in_reply_to_status_id is not None:
-            tweet = api.GetStatus(status_id=reply.in_reply_to_status_id)
-            print(tweet.text)
+'''Grabs a specified number of original tweets from a given replying profile, puts in a list containing the original
+tweet and reply in their own two element list (original: 0, reply: 1)'''
+def original_tweets(profile, number):
+    to_return = []
+    timeline = api.GetUserTimeline(screen_name=profile)
+    index = 0
+    while len(to_return) < number:
+        tweet = timeline[index]
+        if tweet.in_reply_to_status_id is not None:
+            to_return.append([api.GetStatus(tweet.in_reply_to_status_id), tweet])
+        index += 1
+    return to_return
 
 
 # main method in python, temp for testing
@@ -115,4 +121,4 @@ if __name__ == '__main__':
     smallTest()
     search = getInput()
     searchTimeLine(search)
-    original_tweet(api.GetSearch(term="applesupport", count=5))
+    print original_tweets("AppleSupport", 5)
