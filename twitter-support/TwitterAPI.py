@@ -19,6 +19,9 @@ Otherwise, follow the instructions from the Github ReadMe (scroll down):
 https://github.com/bear/python-twitter
 '''
 import twitter
+import string
+import nltk
+nltk.download('stopwords')
 
 # Initializes Twitter API from input file
 def initializeAPIfromfile(filename):
@@ -114,7 +117,12 @@ def original_tweets(profile, number):
             to_return.append([api.GetStatus(tweet.in_reply_to_status_id), tweet])
         index += 1
     return to_return
-
+  
+  def key_words(search):
+    return [word.translate(string.maketrans('', ''), string.punctuation).lower()
+             for word in search.split()
+             if word.translate(string.maketrans('', ''), string.punctuation).lower()
+             not in set(nltk.corpus.stopwords.words('english'))]
 
 # main method in python, temp for testing
 if __name__ == '__main__':
