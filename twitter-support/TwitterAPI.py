@@ -119,10 +119,12 @@ def original_tweets(profile, number=50):
     to_return = []
     timeline = api.GetUserTimeline(screen_name=profile)
     index = 0
-    while len(to_return) < number and index < len(timeline)-2:
+    while len(to_return) < number and index < len(timeline):
         tweet = timeline[index]
-        if tweet.in_reply_to_status_id is not None:
+        try:
             to_return.append([api.GetStatus(tweet.in_reply_to_status_id), tweet])
+        except:
+            pass
         index += 1
     return to_return
 
