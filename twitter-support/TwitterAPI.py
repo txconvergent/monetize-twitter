@@ -119,7 +119,7 @@ def original_tweets(profile, number=50):
     to_return = []
     timeline = api.GetUserTimeline(screen_name=profile)
     index = 0
-    while len(to_return) < number and index < len(timeline):
+    while len(to_return) < number and index < len(timeline)-2:
         tweet = timeline[index]
         if tweet.in_reply_to_status_id is not None:
             to_return.append([api.GetStatus(tweet.in_reply_to_status_id), tweet])
@@ -165,7 +165,7 @@ def get_tweets_by_search(profile, search, number_of_tweets):
 # front-end method #2, takes in profile, search, number_of_tweets, returns tweet ID's of AppleSupport responses
 def getTweetIDs(profile, search, numTweets):
     tweets = get_tweets_by_search(profile, search, numTweets)
-    return [t[1] for t in tweets]
+    return [t[1].id for t in tweets]
 
 # main method in python, temp for testing
 if __name__ == '__main__':
