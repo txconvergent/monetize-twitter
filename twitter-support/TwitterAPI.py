@@ -115,11 +115,11 @@ def searchTimeLine(search):
 
 '''Grabs a specified number of original tweets from a given replying profile, puts in a list containing the original
 tweet and reply in their own two element list (original: 0, reply: 1)'''
-def original_tweets(profile, number):
+def original_tweets(profile, number=50):
     to_return = []
     timeline = api.GetUserTimeline(screen_name=profile)
     index = 0
-    while len(to_return) < number:
+    while len(to_return) < number and index < len(timeline):
         tweet = timeline[index]
         if tweet.in_reply_to_status_id is not None:
             to_return.append([api.GetStatus(tweet.in_reply_to_status_id), tweet])
@@ -160,12 +160,12 @@ def sort_by_priority(tweets, search):
 #for how many tweets are wanted. returns a lists of tweet-reply pairs (original tweet accessed with index 0, reply
 #with 1). Note, this gives the entire tweet object, not just the text.
 def get_tweets_by_search(profile, search, number_of_tweets):
-    return sort_by_priority(original_tweets(profile), number_of_tweets, search)
+    return sort_by_priority(original_tweets(profile), search)[:number_of_tweets]
 
 # front-end method #2, takes in profile, search, number_of_tweets, returns tweet ID's of AppleSupport responses
 def getTweetIDs(profile, search, numTweets):
     tweets = get_tweets_by_search(profile, search, numTweets)
-    return [t[1].id for t in tweets]
+    return [t[1] for t in tweets]
 
 # main method in python, temp for testing
 if __name__ == '__main__':
