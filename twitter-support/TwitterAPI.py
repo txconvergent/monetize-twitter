@@ -21,7 +21,15 @@ https://github.com/bear/python-twitter
 import twitter
 import string
 import nltk
+import sys
+import io
+import os
+
+# wrapper code to trash the system.out from this function
+save_stdout = sys.stdout
+sys.stdout = open(os.devnull, "w")
 nltk.download('stopwords')
+sys.stdout = save_stdout
 
 # Initializes Twitter API from input file
 def initializeAPIfromfile(filename):
@@ -145,14 +153,19 @@ def sort_by_priority(tweets, search):
     sort_tweets = sorted(priority, key=priority.get, reverse=True)
     to_return = []
     for tweet in sort_tweets:
-        to_return.append([[api.GetStatus(tweet.in_reply_to_status_id), tweet]])
+        to_return.append([api.GetStatus(tweet.in_reply_to_status_id), tweet])
     return to_return
 
 #method front-end calls, takes in a string with the name of the profile, a string with the search, and an int
 #for how many tweets are wanted. returns a lists of tweet-reply pairs (original tweet accessed with index 0, reply
 #with 1). Note, this gives the entire tweet object, not just the text.
 def get_tweets_by_search(profile, search, number_of_tweets):
-    return sort_by_priority(original_tweets(profile, number_of_tweets), search)
+    return sort_by_priority(original_tweets(profile), number_of_tweets, search)
+
+# front-end method #2, takes in profile, search, number_of_tweets, returns tweet ID's of AppleSupport responses
+def getTweetIDs(profile, search, numTweets):
+    tweets = get_tweets_by_search(profile, search, numTweets)
+    return [t[1].id for t in tweets]
 
 # main method in python, temp for testing
 if __name__ == '__main__':

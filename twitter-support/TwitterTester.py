@@ -1,3 +1,8 @@
+import nltk
+import TwitterAPI
+
 # main method
 if __name__ == '__main__':
-    print("Testing")
+    tweets = TwitterAPI.getTweetIDs("AppleSupport", "", 5)
+    for t in tweets:
+        print(t)
