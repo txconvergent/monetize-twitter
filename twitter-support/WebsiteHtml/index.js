@@ -1,11 +1,14 @@
 $(document).ready(function(){
-    $("#searchButton").click(function() {
-        var inputHandle = document.getElementById("inputHandle");
-        var inputQuestion = document.getElementById("inputQuestion");
-        var inputReplyNum = document.getElementById("inputReplyNum");
+    $("#submit").click(function() {
+        var inputHandle = document.getElementById("inputHandle").value;
+        var inputQuestion = document.getElementById("inputQuestion").value;
 
-        window.location.href="search.html";
-        $("#pageName").html(inputHandle.value);
-        $("#question").html(inputQuestion.value);
+        if (inputHandle.charAt(0) != '@')
+            inputHandle = '@' + inputHandle;
+        
+        $("#displayHandle").html(inputHandle);
+        $("#displayQuestion").html(inputQuestion);
+        $("#inputHandle").val("");
+        $("#inputQuestion").val("");
     });
 });
