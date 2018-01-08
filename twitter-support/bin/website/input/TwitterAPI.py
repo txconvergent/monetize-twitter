@@ -19,9 +19,7 @@ Otherwise, follow the instructions from the Github ReadMe (scroll down):
 https://github.com/bear/python-twitter
 '''
 import twitter
-import string
-import sys, os
-import io
+from django.conf import settings
 from nltk.corpus import stopwords
 
 # if True print outs debug statements
@@ -45,7 +43,7 @@ def initializeAPIfromfile(filename):
     return api
 
 debug("Initializing API...")
-api = initializeAPIfromfile("/Users/raghavan/PycharmProjects/DjangoTwitter/venv/bin/website/input/static/keys.txt")
+api = initializeAPIfromfile(settings.BASE_DIR + "/input/static/keys.txt")
 debug("API initialized!")
 
 # setup stopwords
@@ -109,7 +107,7 @@ def usernameExist(profile):
 # Front End Method: Takes profile, query, and num tweets and returns tweets to display
 def searchTimeLine(profile, query, numTweets):
     # the amount of tweets to parse
-    parsing = 50
+    parsing = 100
 
     # filter stopwords from query
     query = filterStopWords(query.lower())
