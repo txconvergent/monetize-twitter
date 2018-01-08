@@ -92,35 +92,51 @@ def filterStopWords(text):
 
 # determines relevance based on the amount of times keywords appear in text
 def relevance(query, text):
+    text = filterStopWords(text).lower()
     score = 0
-    for word in query:
-        score += query.count(word)
+    for word in query.strip().split(" "):
+        score += text.count(word)
     return score
 
-#function to parse tweets and assigns a quantified 'relevance' to each tweet
-#unfinished
-def searchTimeLine(profile, text, numTweets):
+# Front End Method: Takes profile, query, and num tweets and returns tweets to display
+def searchTimeLine(profile, query, numTweets):
+    # the amount of tweets to parse
+    PARSING = 20
+
+    # filter stopwords from query
+    query = filterStopWords(query.lower())
+    
     # get a list of recent tweets from support handle
-    statuses = api.GetUserTimeline(screen_name=profile, count=100) # seems to max out at 200
+    statuses = api.GetUserTimeline(screen_name=profile, count=PARSING) # seems to max out at 200
     debug("Loaded %d tweets!" % len(statuses))
 
     # filter out tweets that aren't replies
+    debug("Filtering out non-responses...")
     replies = []
     for s in statuses:
         try:
-            replies.append((s, api.GetStatus(s.in_reply_to_status_id)))
+            if (s.in_reply_to_status_id):
+                replies.append([s, api.GetStatus(s.in_reply_to_status_id)])
         except twitter.error.TwitterError:
             pass
     debug("%d tweets remaining after filtering out non-responses" % len(replies))
 
     # assign relevance score
+    debug("Assigning relevance...")
+    for r in replies:
+        question, response = r[0], r[1]
+        score = 0
+        score += (20 * (relevance(query, question.text) + relevance(query, response.text)))
+        score += (question.favorite_count + response.favorite_count)
+        score += (5 * (question.retweet_count + response.favorite_count))
+        r.append(score)
 
+    # sort by relevance
+    replies.sort(key=lambda x: x[2], reverse=True) 
 
-# front-end method #2, takes in profile, search, number_of_tweets, returns tweet ID's of AppleSupport responses
-def getTweetIDs(profile, search, numTweets):
-    tweets = get_tweets_by_search(profile, search, numTweets)
-    return [t[1].id for t in tweets]
+    return [r[1].id for r in replies[:min(numTweets, PARSING)]]
+
 
 # main method in python, temp for testing
 if __name__ == '__main__':
-    searchTimeLine("AppleSupport", "broken screen", 10)
+    print(searchTimeLine("AppleSupport", " broken iphone", 10))
