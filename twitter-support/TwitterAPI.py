@@ -22,7 +22,7 @@ import twitter
 import string
 import sys, os
 import io
-import nltk
+from nltk.corpus import stopwords
 
 # if True print outs debug statements
 DEBUG_ON = True
@@ -47,6 +47,9 @@ def initializeAPIfromfile(filename):
 debug("Initializing API...")
 api = initializeAPIfromfile("keys.txt")
 debug("API initialized!")
+
+# setup stopwords
+stopWords = set(stopwords.words('english'))
 
 '''
 The API is pretty dense for documentation, so here's
@@ -78,24 +81,14 @@ Other (potentially) useful methods:
         api.GetUserTimeline(screen_name="Username")
     GetFfriends: not as useful, but access a user's friends list
 '''
-def smallTest():
-    print("Small Scale Test for AppleSupport")
-    for tweet in api.GetSearch(term="applesupport", count=5):
-        print("-- Tweet -- ")
-        print("Username: @" + tweet.user.screen_name)
-        print(tweet.fulltext if hasattr(tweet, 'fulltext') else tweet.text)
-        print("Retweets: " + str(tweet.retweet_count))
-        print("Favorties: " + str(tweet.favorite_count))
-        print("Hashtags: " + ", ".join([ht.text for ht in tweet.hashtags]))
-        print("")
 
-
-#simple function tests getting search input and separates words
-#company name is first element of list returned
-def getInput():
-    search = input("Please enter a search in the format @<username> <string>\n").strip().split(' ')
-    search[0] = search[0].replace('@', '')
-    return search
+# given a String, filters out the stopwords
+def filterStopWords(text):
+    filtered = []
+    for word in text.strip().split(" "):
+        if word not in stopWords:
+            filtered.append(word)
+    return " ".join(filtered)
 
 # determines relevance based on the amount of times keywords appear in text
 def relevance(query, text):
@@ -115,7 +108,7 @@ def searchTimeLine(profile, text, numTweets):
     replies = []
     for s in statuses:
         try:
-            replies.append((s, api.GetStatus(s.in_reply_to_status_id))
+            replies.append((s, api.GetStatus(s.in_reply_to_status_id)))
         except twitter.error.TwitterError:
             pass
     debug("%d tweets remaining after filtering out non-responses" % len(replies))
@@ -130,4 +123,4 @@ def getTweetIDs(profile, search, numTweets):
 
 # main method in python, temp for testing
 if __name__ == '__main__':
-    searchTimeLine("AppleSupport", "broken screen")
+    searchTimeLine("AppleSupport", "broken screen", 10)
