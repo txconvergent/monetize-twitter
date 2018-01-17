@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Purchase Complete</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="text/javascript">
+	var data = 
+		'<?xml version="1.0" encoding="UTF-8" standalone="no"?>' +
+    		'<transaction>' +
+		'<value>1100</value>' +
+		'<buyerId>1</buyerId>' +
+		'<sellerId>1</sellerId>' +
+		'<Id>4</Id>' +
+    		'<location>30.2672° N, 97.7431° W</location>' + 
+    		'</transaction>';
+	
+	var url = 'http://localhost:8080/marketplace-server/marketplace/databases/transactions/';
+
+        function sendPurchase(url) {
+          var xhttp;
+	  xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	    	
+	    }
+	  };
+
+	  xhttp.open("POST", url, true);
+	  xhttp.setRequestHeader("Content-Type", "text/xml");
+	  xhttp.send(data);
+        }
+
+	window.onload = function() {
+  		sendPurchase(url);
+	};
+        
+        </script>
+
+	<style>
+	div {
+		border-style: solid;
+    		border-width: 2px;
+		border-radius: 5px;
+		border-color: #d3d3d3;
+		width: 30%;
+		height: 30%;
+		padding: 100px;
+		margin:0 auto;
+		margin-top: 10%;
+		align-items: center;
+  		justify-content: center
+		text-align: center;
+	}
+
+	p {
+		color:  #00aced;
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		text-align: center;
+		font-size: 25px;
+		margin:0 auto;
+	}
+
+	button {
+		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		margin:0 auto;
+		margin-top:20px;
+		align: center;
+		display:block;
+		 /*adjust the roundness*/
+    		border-radius: 4px;
+    		moz-border-radius: 4px;
+    		webkit-border-radius: 4px;
+    		/*adjust height and width*/
+    		/*change border colour*/
+    		border:1px #245ec6 solid;
+		padding: 10px;
+		color: white;
+		background-color: #00aced;
+	}
+	</style>
+
+    </head>
+    <body>
+    	<div>
+		<p>Purchase Completed</p>
+		<button onclick="window.location.href='marketplace-main.html'">Keep Shopping</button>
+	</div>
+    </body>
+</html>
